@@ -1,87 +1,134 @@
-# Definir una clase para representar vehículos
-class Vehiculo:
-    # Constructor para inicializar atributos
-    def __init__(self, marca, velocidad_maxima, color, pais):
-        self.__marca = marca  # Marca del vehículo (privado)
-        self.__velocidad = 0  # Velocidad actual del vehículo (privado)
-        self.__velocidad_maxima = velocidad_maxima  # Velocidad máxima del vehículo (privado)
-        self.color = color  # Color del vehículo (público)
-        self._pais = pais  # País del vehículo (protegido)
+class Juego:
+    def __init__(self, nombre, monedas, vidas, tamaño, mundo, nivel, disparos):
+        self.nombre = nombre
+        self.monedas = monedas
+        self.vidas = vidas
+        self.tamaño = tamaño
+        self.mundo = mundo
+        self.nivel = nivel
+        self.disparos = disparos
 
-    # Método para acelerar el vehículo
-    def acelerar(self, cantidad):
-        self.__velocidad += cantidad
-        if self.__velocidad > self.__velocidad_maxima:
-            self.__velocidad = self.__velocidad_maxima
+    def cambiar_mundo(self):
+        self.nivel += 1
+        if self.nivel >= 5:
+            self.nivel = 1
+            self.mundo += 1
+            if self.mundo >= 9:
+                self.mundo = 1
+                self.nivel = 1
 
-    # Método para mostrar la velocidad actual del vehículo
-    def mostrar_velocidad(self):
-        return self.__velocidad
+    def hongoscre(self):
+        self.tamaño = "grande"
 
-    # Método para desacelerar el vehículo
-    def desacelerar(self, cantidad):
-        self.__velocidad -= cantidad
-        if self.__velocidad < 0:
-            self.__velocidad = 0
+    def recoger_flor(self):
+        if self.tamaño == "grande":
+            self.disparos += 1
 
-# Crear una lista para almacenar vehículos
-vehiculos = []
+    def recoger_monedas(self):
+        self.monedas += 20
+        if self.monedas == 100:
+            self.vidas += 1
+        elif self.monedas > 100:
+            self.monedas = 20
 
-# Bucle principal para el menú
+    def incidentes(self):
+        if self.tamaño == "pequeño":
+            self.vidas -= 1
+        elif self.tamaño == "grande":
+            self.tamaño = "pequeño"
+
+    def incidenteg(self):
+        self.vidas -= 1
+        self.tamaño = "pequeño"
+
+    def recoger_hongos_vida(self):
+        self.vidas += 1
+
+    def reiniciar(self):
+        self.monedas = 0
+        self.vidas = 3
+        self.tamaño = "pequeño"
+        self.mundo = 1
+        self.nivel = 1
+
+
+def mostrar(listaa):
+    for per in listaa:
+        print(
+            "personaje:", per.nombre, "//",
+            "monedas:", per.monedas, "//",
+            "vidas:", per.vidas, "//",
+            "tamaño:", per.tamaño, "//",
+            "mundo:", per.mundo, "//",
+            "nivel:", per.nivel, "disparos:", per.disparos
+        )
+
+
+def elegir_P(listaa):
+    print("1. mario")
+    print("2. luigi")
+    personaje = int(input("Ingrese el personaje: "))
+    if personaje == 1:
+        nombre = "mario"
+    elif personaje == 2:
+        nombre = "luigi"
+    monedas = 0
+    vidas = 3
+    tamaño = "pequeño"
+    mundo = 1
+    nivel = 1
+    disparos = 0
+    juego = Juego(nombre, monedas, vidas, tamaño, mundo, nivel, disparos)
+    listaa.append(juego)
+    return juego
+
+
+listaa = []
+opc = 0
 while True:
-    print("Menú:")
-    print("1. Agregar vehículo")
-    print("2. Acelerar vehículo")
-    print("3. Mostrar velocidad")
-    print("4. Desacelerar vehículo")
-    print("5. Salir")
-    
-    opcion = input("Selecciona una opción: ")
 
-    if opcion == "1":
-        marca = input("Marca del vehículo: ")
-        velocidad_maxima = int(input("Velocidad máxima del vehículo: "))
-        color = input("Color del vehículo: ")
-        pais = input("País del vehículo: ")
+    print("1. Elegir personaje")
+    print("2. Avanzar")
+    print("3. Recoger hongo de crecimiento")
+    print("4. Recoger flor")
+    print("5. Recoger monedas")
+    print("6. Incidente sencillo")
+    print("7. Incidente grave")
+    print("8. Recoger hongo de vida")
+    print("9. Reiniciar")
+    print("10. Salir")
 
-        nuevo_vehiculo = Vehiculo(marca, velocidad_maxima, color, pais)
-        vehiculos.append(nuevo_vehiculo)
-        print("Vehículo agregado con éxito.")
+    opc = int(input("Selecciona una opción: "))
 
-    elif opcion == "2":
-        if not vehiculos:
-            print("No hay vehículos registrados.")
-        else:
-            for i, vehiculo in enumerate(vehiculos):
-                print(f"{i + 1}. Marca: {vehiculo._Vehiculo__marca}, Color: {vehiculo.color}")
-            seleccion = int(input("Seleccione un vehículo para acelerar: ")) - 1
-            cantidad = int(input("Cantidad de aceleración: "))
-            vehiculos[seleccion].acelerar(cantidad)
-            print("Velocidad actual:", vehiculos[seleccion].mostrar_velocidad())
-
-    elif opcion == "3":
-        if not vehiculos:
-            print("No hay vehículos registrados.")
-        else:
-            for i, vehiculo in enumerate(vehiculos):
-                print(f"{i + 1}. Marca: {vehiculo._Vehiculo__marca}, Color: {vehiculo.color}")
-            seleccion = int(input("Seleccione un vehículo para mostrar la velocidad: ")) - 1
-            print("Velocidad actual:", vehiculos[seleccion].mostrar_velocidad())
-
-    elif opcion == "4":
-        if not vehiculos:
-            print("No hay vehículos registrados.")
-        else:
-            for i, vehiculo in enumerate(vehiculos):
-                print(f"{i + 1}. Marca: {vehiculo._Vehiculo__marca}, Color: {vehiculo.color}")
-            seleccion = int(input("Seleccione un vehículo para desacelerar: ")) - 1
-            cantidad = int(input("Cantidad de desaceleración: "))
-            vehiculos[seleccion].desacelerar(cantidad)
-            print("Velocidad actual:", vehiculos[seleccion].mostrar_velocidad())
-
-    elif opcion == "5":
-        print("Saliendo del programa.")
+    if opc == 1:
+        per = elegir_P(listaa)
+        mostrar(listaa)
+    elif opc == 2:
+        per.cambiar_mundo()
+        mostrar(listaa)
+    elif opc == 3:
+        per.hongoscre()
+        mostrar(listaa)
+    elif opc == 4:
+        per.recoger_flor()
+        mostrar(listaa)
+    elif opc == 5:
+        per.recoger_monedas()
+        mostrar(listaa)
+    elif opc == 6:
+        per.incidentes()
+        mostrar(listaa)
+    elif opc == 7:
+        per.incidenteg()
+        mostrar(listaa)
+    elif opc == 8:
+        per.recoger_hongos_vida()
+        mostrar(listaa)
+    elif opc == 9:
+        per.reiniciar()
+        mostrar(listaa)
+    elif opc >= 10:
         break
 
-    else:
-        print("Opción no válida. Por favor, seleccione una opción válida.")
+  
+ 
