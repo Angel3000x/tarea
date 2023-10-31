@@ -1,134 +1,69 @@
-class Juego:
-    def __init__(self, nombre, monedas, vidas, tamaño, mundo, nivel, disparos):
-        self.nombre = nombre
-        self.monedas = monedas
-        self.vidas = vidas
-        self.tamaño = tamaño
-        self.mundo = mundo
-        self.nivel = nivel
-        self.disparos = disparos
+import random
+class Tragamonedas:
+    def __init__(self):
+        self.creditos_disponibles = 0
+        self.creditos_ganados = 0
+        self.opciones = ['Bar/Bar', 'Bar', '77', 'Estrellas', 'Sandia', 'Melón', 'Campana', 'Naranja', 'Manzana', 'Cereza']
 
-    def cambiar_mundo(self):
-        self.nivel += 1
-        if self.nivel >= 5:
-            self.nivel = 1
-            self.mundo += 1
-            if self.mundo >= 9:
-                self.mundo = 1
-                self.nivel = 1
+    def insertar_monedas(self, cantidad):
+        if self.creditos_disponibles + cantidad > 999:
+            print("Has alcanzado el límite máximo de créditos.")
+        else:
+            self.creditos_disponibles += cantidad
 
-    def hongoscre(self):
-        self.tamaño = "grande"
+    def apostar(self, opcion, creditos_apostados):
+        if creditos_apostados <= 0 or creditos_apostados > 9 or creditos_apostados > self.creditos_disponibles:
+            print("Apuesta inválida. Inténtalo de nuevo.")
+        else:
+            self.creditos_disponibles -= creditos_apostados
+            self.girar(opcion, creditos_apostados)
 
-    def recoger_flor(self):
-        if self.tamaño == "grande":
-            self.disparos += 1
+    def girar(self, opcion, creditos_apostados):
+        resultado = random.choice(self.opciones)
+        print(f"Resultado: {resultado}")
+        if resultado == opcion:
+            premio = creditos_apostados * (self.opciones.index(opcion) + 1)
+            self.creditos_disponibles += premio
+            self.creditos_ganados += premio
+            print(f"¡Felicidades! Has ganado {premio} créditos.")
+        else:
+            print("Lo siento, no has ganado esta vez.")           
 
-    def recoger_monedas(self):
-        self.monedas += 20
-        if self.monedas == 100:
-            self.vidas += 1
-        elif self.monedas > 100:
-            self.monedas = 20
+    def cobrar_creditos(self):
+        print(f"Tienes {self.creditos_disponibles} créditos disponibles y {self.creditos_ganados} créditos ganados.")
+        self.creditos_ganados = 0
 
-    def incidentes(self):
-        if self.tamaño == "pequeño":
-            self.vidas -= 1
-        elif self.tamaño == "grande":
-            self.tamaño = "pequeño"
-
-    def incidenteg(self):
-        self.vidas -= 1
-        self.tamaño = "pequeño"
-
-    def recoger_hongos_vida(self):
-        self.vidas += 1
-
-    def reiniciar(self):
-        self.monedas = 0
-        self.vidas = 3
-        self.tamaño = "pequeño"
-        self.mundo = 1
-        self.nivel = 1
+    def jugar_de_nuevo(self):
+        self.girar('Bar/Bar', self.creditos_disponibles)
 
 
-def mostrar(listaa):
-    for per in listaa:
-        print(
-            "personaje:", per.nombre, "//",
-            "monedas:", per.monedas, "//",
-            "vidas:", per.vidas, "//",
-            "tamaño:", per.tamaño, "//",
-            "mundo:", per.mundo, "//",
-            "nivel:", per.nivel, "disparos:", per.disparos
-        )
-
-
-def elegir_P(listaa):
-    print("1. mario")
-    print("2. luigi")
-    personaje = int(input("Ingrese el personaje: "))
-    if personaje == 1:
-        nombre = "mario"
-    elif personaje == 2:
-        nombre = "luigi"
-    monedas = 0
-    vidas = 3
-    tamaño = "pequeño"
-    mundo = 1
-    nivel = 1
-    disparos = 0
-    juego = Juego(nombre, monedas, vidas, tamaño, mundo, nivel, disparos)
-    listaa.append(juego)
-    return juego
-
-
-listaa = []
-opc = 0
+tragamonedas = Tragamonedas()
 while True:
-
-    print("1. Elegir personaje")
-    print("2. Avanzar")
-    print("3. Recoger hongo de crecimiento")
-    print("4. Recoger flor")
-    print("5. Recoger monedas")
-    print("6. Incidente sencillo")
-    print("7. Incidente grave")
-    print("8. Recoger hongo de vida")
-    print("9. Reiniciar")
-    print("10. Salir")
-
-    opc = int(input("Selecciona una opción: "))
-
-    if opc == 1:
-        per = elegir_P(listaa)
-        mostrar(listaa)
-    elif opc == 2:
-        per.cambiar_mundo()
-        mostrar(listaa)
-    elif opc == 3:
-        per.hongoscre()
-        mostrar(listaa)
-    elif opc == 4:
-        per.recoger_flor()
-        mostrar(listaa)
-    elif opc == 5:
-        per.recoger_monedas()
-        mostrar(listaa)
-    elif opc == 6:
-        per.incidentes()
-        mostrar(listaa)
-    elif opc == 7:
-        per.incidenteg()
-        mostrar(listaa)
-    elif opc == 8:
-        per.recoger_hongos_vida()
-        mostrar(listaa)
-    elif opc == 9:
-        per.reiniciar()
-        mostrar(listaa)
-    elif opc >= 10:
+    print("\n===== MÁQUINA TRAGAMONEDAS =====")
+    print(f"Créditos disponibles: {tragamonedas.creditos_disponibles}")
+    print(f"Créditos ganados: {tragamonedas.creditos_ganados}")
+    print("\n1. Insertar monedas")
+    print("2. Apostar")
+    print("3. Cobrar créditos")
+    print("4. Jugar de nuevo")
+    print("5. Salir")
+   
+    opcion = input("\nElige una opción: ")
+    if opcion == '1':
+        monedas = int(input("Ingresa la cantidad de monedas a insertar (máximo 999): "))
+        tragamonedas.insertar_monedas(monedas)
+    elif opcion == '2':
+        apuesta = input(f"Elige una opción para apostar {tragamonedas.opciones}: ")
+        creditos_apostados = int(input("Ingresa la cantidad de créditos a apostar (máximo 9): "))
+        tragamonedas.apostar(apuesta, creditos_apostados)
+    elif opcion == '3':
+        tragamonedas.cobrar_creditos()
+    elif opcion == '4':
+        tragamonedas.jugar_de_nuevo()
+    elif opcion == '5':
+        print("¡Gracias por jugar!")
         break
+    else:
+        print("Opción inválida. Inténtalo de nuevo.")
 
-  
- 
+
